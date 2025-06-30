@@ -56,7 +56,11 @@ export default function handler(req, res) {
         return res.status(200).json({
             equation: equation,
             result: result,
-            success: true
+            success: true,
+            info: {
+                credits: "Made by harys722, available only everyone.",
+                support: "https://harys.is-a.dev/api"
+            }
         });
         
     } catch (error) {
