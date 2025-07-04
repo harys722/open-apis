@@ -1,6 +1,6 @@
-import { corsMiddleware, withCors } from '../../data/cors';
-import { checkApiKey } from '../../data/auth';
-import data from '../../data/codesave';
+import { corsMiddleware, withCors } from '../../data/cors.js';
+import { checkApiKey } from '../../data/auth.js';
+import data from '../../data/codesave.js';
 
 const { questions } = data;
 
