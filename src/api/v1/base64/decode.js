@@ -1,6 +1,9 @@
+import { corsMiddleware, withCors } from '../../data/cors.js';
 const { checkApiKey } = require('../../data/auth'); 
 
 export default async function handler(req, res) {
+  if (corsMiddleware(req, res)) return;
+  
   // Authorization check
   if (!checkApiKey(req, res)) {
     return; // Stop processing if not authorized
