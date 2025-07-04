@@ -1,23 +1,21 @@
+import { corsMiddleware, withCors } from '../../data/cors.js';
+import { checkApiKey } from '../../data/auth.js';
+
 function getColorInfo(hex) {
   const sanitizedHex = hex.replace('#', '').toLowerCase();
   if (!/^([0-9a-f]{3}|[0-9a-f]{6})$/.test(sanitizedHex)) {
     return { error: "Invalid hex color code." };
   }
-
   let fullHex = sanitizedHex;
   if (sanitizedHex.length === 3) {
     fullHex = sanitizedHex.split('').map(c => c + c).join('');
   }
-
   const r = parseInt(fullHex.substring(0, 2), 16);
   const g = parseInt(fullHex.substring(2, 4), 16);
   const b = parseInt(fullHex.substring(4, 6), 16);
-
   const intCode = parseInt(fullHex, 16);
-
   const brightness = (r * 299 + g * 587 + b * 114) / 1000;
   const textColor = brightness > 125 ? 'black' : 'white';
-
   return {
     hex: `#${fullHex}`,
     intCode: intCode,
@@ -27,17 +25,16 @@ function getColorInfo(hex) {
   };
 }
 
-import { checkApiKey } from '../../data/auth';
-
 export default function handler(req, res) {
+  if (corsMiddleware(req, res)) return;
+  
   if (!checkApiKey(req, res)) {
-    return; // Stop processing if not authorized
+    return; 
   }
-
+  
   const { hex } = req.query;
-
   let colorInfo;
-
+  
   if (hex) {
     colorInfo = getColorInfo(hex);
     if (colorInfo.error) {
@@ -47,7 +44,7 @@ export default function handler(req, res) {
     const randomHex = '#' + Math.floor(Math.random() * 0xffffff).toString(16).padStart(6, '0');
     colorInfo = getColorInfo(randomHex);
   }
-
+  
   res.json({
     hex: colorInfo.hex,
     intCode: colorInfo.intCode,
@@ -56,7 +53,7 @@ export default function handler(req, res) {
     textColor: colorInfo.textColor,
     info: {
       credits: "Made by harys722, available only for cool people.",
-      support: "https://harys.is-a.dev/api"
+      website: "https://harys.is-a.dev"
     }
   });
 }
