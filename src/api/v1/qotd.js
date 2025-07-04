@@ -1,33 +1,33 @@
 import { corsMiddleware, withCors } from '../../data/cors.js';
-import { checkApiKey } from '../../data/auth.js';
-import data from '../../data/codesave.js';
+import { checkApiKey } from '../../data/auth';
+import data from '../../data/codesave';
 
 const { questions } = data;
 
-export default function handler(request, response) {
+export default function handler(req, res) {
   if (corsMiddleware(req, res)) return;
   
-  if (!checkApiKey(request, response)) {
+  if (!checkApiKey(req, res)) {
     return;
   }
 
-  response.setHeader('Access-Control-Allow-Origin', '*');
-  response.setHeader('Access-Control-Allow-Methods', 'GET');
-  response.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
-  if (request.method === 'OPTIONS') {
-    response.status(200).end();
+  if (req.method === 'OPTIONS') {
+    res.status(200).end();
     return;
   }
 
-  if (request.method !== 'GET') {
-    return response.status(405).json({ 
+  if (req.method !== 'GET') {
+    return res.status(405).json({ 
       error: 'Method not allowed',
       message: 'This endpoint only accepts GET requests'
     });
   }
 
-  let { count } = request.query;
+  let { count } = req.query;
   let questionCount = 1; // Default to 1
 
   if (count !== undefined) {
@@ -52,7 +52,7 @@ export default function handler(request, response) {
     const shuffledQuestions = [...questions].sort(() => 0.5 - Math.random());
     const selectedQuestions = shuffledQuestions.slice(0, questionCount);
 
-    response.status(200).json({
+    res.status(200).json({
       questions: selectedQuestions,
       total_questions: questions.length,
       requested_count: questionCount,
@@ -63,7 +63,7 @@ export default function handler(request, response) {
     });
   } catch (error) {
     console.error('Error generating questions:', error);
-    response.status(500).json({ 
+    res.status(500).json({ 
       error: 'Internal server error',
       message: error.message || 'Failed to generate questions'
     });
