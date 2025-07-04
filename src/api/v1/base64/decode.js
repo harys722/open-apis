@@ -1,16 +1,15 @@
 import { corsMiddleware, withCors } from '../../data/cors.js';
-const { checkApiKey } = require('../../data/auth'); 
+const { checkApiKey } = require('../../data/auth');
 
 export default async function handler(req, res) {
   if (corsMiddleware(req, res)) return;
   
-  // Authorization check
   if (!checkApiKey(req, res)) {
-    return; // Stop processing if not authorized
+    return;
   }
 
   if (req.method !== 'POST') {
-    res.status(405).send('Method Not Allowed');
+    res.status(405).send("Method Not Allowed: This endpoint only accepts 'POST' requests.");
     return;
   }
 
@@ -21,15 +20,13 @@ export default async function handler(req, res) {
     return;
   }
 
-  // Validate if the input is a valid base64 string
-  const base64Regex = /^[a-zA-Z0-9+/=]*={0,2}$/;
-  if (!base64Regex.test(string)) {
-    res.status(400).send('Invalid base64 string');
-    return;
-  }
-
   try {
-    const decodedContent = Buffer.from(string, 'base64').toString('utf-8');
+    const decodedBuffer = Buffer.from(string, 'base64');
+    const reEncoded = decodedBuffer.toString('base64');
+
+
+    const decodedContent = decodedBuffer.toString('utf-8');
+
     res.json({
       base64: {
         string: string,
@@ -41,6 +38,6 @@ export default async function handler(req, res) {
       }
     });
   } catch (error) {
-    res.status(500).send("Error decoding string, please try again!");
+    res.status(400).send("Invalid base64 string");
+    return;
   }
-}
