@@ -1,3 +1,6 @@
+import { corsMiddleware, withCors } from '../../../data/cors.js';
+import { checkApiKey } from '../../../data/auth';
+
 function evaluateExpression(expression) {
     try {
         const cleanExpression = expression.replace(/\s/g, '');
@@ -19,9 +22,9 @@ function evaluateExpression(expression) {
     }
 }
 
-import { checkApiKey } from '../../data/auth';
-
 export default function handler(req, res) {
+  if (corsMiddleware(req, res)) return;
+    
   if (!checkApiKey(req, res)) {
     return; // Stop processing if not authorized
   }
