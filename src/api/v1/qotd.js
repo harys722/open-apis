@@ -1,4 +1,4 @@
-import { corsMiddleware, withCors } from '../../data/cors.js';
+import { corsMiddleware, withCors } from '../../data/cors';
 import { checkApiKey } from '../../data/auth';
 import data from '../../data/codesave';
 
