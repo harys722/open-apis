@@ -1,9 +1,12 @@
+import { corsMiddleware, withCors } from '../../data/cors.js';
 const { checkApiKey } = require('../../data/auth');
 import data from '../../data/codesave';
 
 const { emojis } = data;
 
 export default function handler(req, res) {
+  if (corsMiddleware(req, res)) return;
+  
   // Authorization check
   if (!checkApiKey(req, res)) {
     return; // Stop processing if not authorized
