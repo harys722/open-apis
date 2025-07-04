@@ -1,5 +1,5 @@
-import { corsMiddleware, withCors } from '../../data/cors.js';
-import { checkApiKey } from '../../data/auth';
+import { corsMiddleware, withCors } from '../../../data/cors.js';
+import { checkApiKey } from '../../../data/auth';
 
 export default async function handler(req, res) {
   if (corsMiddleware(req, res)) return;
