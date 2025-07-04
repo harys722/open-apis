@@ -1,4 +1,6 @@
-// Utility functions
+import { corsMiddleware, withCors } from '../../../data/cors.js';
+import { checkApiKey } from '../../../data/auth';
+
 const isPrime = (num) => {
   if (!Number.isInteger(num) || num < 2) return false;
   for (let i = 2; i <= Math.sqrt(num); i++) {
@@ -55,10 +57,10 @@ const primeFactors = (num) => {
   return factors;
 };
 
-// Main handler
-import { checkApiKey } from '../../data/auth';
 
 export default function handler(req, res) {
+  if (corsMiddleware(req, res)) return;
+  
   if (!checkApiKey(req, res)) {
     return; // Stop processing if not authorized
   }
