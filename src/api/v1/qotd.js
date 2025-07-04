@@ -1,7 +1,12 @@
-import questions from '../../data/questions';
+import { corsMiddleware, withCors } from '../../data/cors.js';
 import { checkApiKey } from '../../data/auth';
+import data from '../../data/codesave';
+
+const { questions } = data;
 
 export default function handler(request, response) {
+  if (corsMiddleware(req, res)) return;
+  
   if (!checkApiKey(request, response)) {
     return;
   }
