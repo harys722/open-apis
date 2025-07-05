@@ -1,0 +1,58 @@
+input: ./docs
+output: .retype
+url: harys722.github.io/open-apis
+branding:
+  title: Open APIs
+  logo: /media/logo.png
+  logoAlign: left
+  colors:
+    label:
+      text: "#ffffff"
+      background: "#0A5966"
+links:
+  - text: Home
+    link: index.md
+    icon: home
+  - text: Website
+    link: https://harys.is-a.dev/
+    icon: globe
+  - text: GitHub
+    link: https://github.com/harys722/open-apis
+    icon: mark-github
+    target: blank
+    target: blank
+edit:
+  repo: "https://github.com/harys722/open-apis"
+  base: "/docs"
+  branch: "main"
+  label: "Edit this page"
+editor:
+  enabled: true
+favicon: /media/logo.png
+generator:
+  recase: all
+markdown:
+  lineBreaks: soft
+meta:
+  title: " | Open APIs"
+
+start:
+  open: false
+snippets:
+  lineNumbers:
+    - js
+    - none
+templating:
+  enabled: true
+  liquid: false
+footer:
+  copyright: "&copy; 2025 Open APIs - All Rights Reserved."
+
+  links:
+    - text: About
+      link: about.md
+      icon: question
+
+    - text: License
+      link: license.md
+      icon: shield-check
